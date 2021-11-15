@@ -15,8 +15,12 @@ export const EventProvider = (props) => {
             .then(setEvents)
     }
 
+    const createEvent = () => {
+        return fetch("", { })
+    }
+
     return (
-        <EventContext.Provider value={{ events, getEvents }} >
+        <EventContext.Provider value={{ events, getEvents, createEvent }} >
             { props.children }
         </EventContext.Provider>
     )
