@@ -1,11 +1,13 @@
-import React, { useContext, useEffect } from "react"
-import { GameContext } from "./GameProvider.js"
+import React, { useState, useEffect } from "react"
+import { useHistory } from "react-router-dom"
+import { getGames } from "./GameManager.js"
 
 export const GameList = (props) => {
-    const { games, getGames } = useContext(GameContext)
+    const [ games, setGames ] = useState([])
+    const history = useHistory()
 
     useEffect(() => {
-        getGames()
+        getGames().then(data => setGames(data))
     }, [])
 
     return (

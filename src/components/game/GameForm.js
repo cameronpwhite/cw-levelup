@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from "react"
-import { GameContext } from "./GameProvider.js"
+import React, { useState, useEffect } from "react"
 import { useHistory } from 'react-router-dom'
+import { createGame, getGames, getGameTypes } from './GameManager.js'
 
 
 export const GameForm = () => {
     const history = useHistory()
-    const { createGame, getGameTypes, gameTypes } = useContext(GameContext)
+    const [gameTypes, setGameTypes] = useState([])
 
     /*
         Since the input fields are bound to the values of
@@ -20,12 +20,8 @@ export const GameForm = () => {
         gameTypeId: 0
     })
 
-    /*
-        Get game types on initialization so that the <select>
-        element presents game type choices to the user.
-    */
     useEffect(() => {
-        getGameTypes()
+        getGameTypes().then(setGameTypes)
     }, [])
 
     /*
@@ -79,16 +75,40 @@ export const GameForm = () => {
                         value={currentGame.title}
                         onChange={changeGameTitleState}
                     />
+                    <label htmlFor="maker">Maker: </label>
+                    <input type="text" name="maker" required className="form-control"
+                        value={currentGame.maker}
+                        onChange={changeGameMakerState}
+                    />
+                    <label htmlFor="players">Players: </label>
+                    <input type="text" name="players" required className="form-control"
+                        value={currentGame.numberOfPlayers}
+                        onChange={changeGamePlayersState}
+                    />
+                    <label htmlFor="skill">Skill Level: </label>
+                    <input type="text" name="skill_level" required className="form-control"
+                        value={currentGame.skillLevel}
+                        onChange={changeGameSkillLevelState}
+                    />
+                    <label htmlFor="type">Game Type: </label>
+                    <select name="type" required className="form-control"
+                        onChange={changeGameTypeState}>
+                        <option>-- Choose a Game Type --</option>
+                        {gameTypes.map(
+                            type => {
+                                return <option value={type.id}>{type.label}</option>
+                            }
+                        )}
+                    </select>
                 </div>
             </fieldset>
 
-            {/* You create the rest of the input fields for each game property */}
+            {/* TODO: create the rest of the input fields */}
 
             <button type="submit"
                 onClick={evt => {
                     // Prevent form from being submitted
                     evt.preventDefault()
-
                     const game = {
                         maker: currentGame.maker,
                         title: currentGame.title,
