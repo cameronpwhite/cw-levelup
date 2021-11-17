@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
+import { createEvent } from "./EventManager.js"
 import { getGames } from "./GameManager.js"
 
 
@@ -84,11 +85,13 @@ export const EventForm = () => {
                     time: currentEvent.time,
                     date: currentEvent.date,
                     description: currentEvent.description,
-                    organizer: ""
                     }
 
+                    createEvent(event)
+                    .then(() => history.push({pathname: "/events"}))
 
                     // Once event is created, redirect user to event list
+                    
                 }}
                 className="btn btn-primary">Create Event</button>
         </form>

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react"
 import { getEvents } from "./EventManager.js"
 import { useHistory } from "react-router-dom"
+import { joinEvent } from "./EventManager"
 
 export const EventList = (props) => {
     const [ events, setEvents ] = useState([])
     const history = useHistory()
 
+    const eventFetcher = () => {
+        getEvents()
+            .then(data => setEvents(data))
+    }
+
     useEffect(() => {
-        getEvents().then(data => setEvents(data))
+        eventFetcher()
     }, [])
 
     return (
@@ -36,6 +42,14 @@ export const EventList = (props) => {
                             }
                             @ {event.time}
                         </div>
+                        <button className="btn btn-2"
+                                onClick={
+                                    () => {
+                                        joinEvent(event.id)
+                                            .then(() => eventFetcher())
+                                    }
+                                }
+                        >Join</button>
                     </section>
                 })
             }
